@@ -62,5 +62,20 @@ def tasks(req):
     return render(req, 'tasks.html')
 
 def create_task(req):
-    form = TaskForm()
-    return render(req, 'create-task.html', {'form': form})
+    if req.method == 'GET':
+        return render(req, 'create-task.html', {'form': TaskForm, })
+    else:
+        try:
+            print(req.POST)
+            form = TaskForm(req.POST)
+            new_task = form.save(commit=False)
+            new_task.user = req.user
+            print(new_task)
+            new_task.save()
+            return redirect('tasks')
+        except Exception as e:
+            return render(req, 'create-task.html', {
+                'form': TaskForm,
+                'error': 'Error de tipo: {}'.format(e),
+                   })
+            
