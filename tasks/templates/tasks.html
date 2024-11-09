@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+<p>TASKS PENDING</p>
+<ul>
+    {% for task in tasks %}
+    <li>
+        <a href="{{ task.id }}">
+            <h1>{{ task.title }}</h1>
+            <p>{{ task.description }}</p>
+            <p>{{ task.user.username }}</p>
+            <p>{{ task.date_completed|date:'M j Y:i' }}</p>
+
+            {% if task.important %}
+                <p>Importante.</p>
+            {% endif %}
+            <!-- <p>{{ task.user.password }}</p> -->
+        </a>
+
+    </li>
+    {% endfor %}
+
+</ul>
+{% endblock %}
