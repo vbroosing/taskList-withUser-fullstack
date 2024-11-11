@@ -7,8 +7,11 @@ class Task(models.Model):
     description = models.TextField(blank=True)
     created = models.DateTimeField(auto_now_add=True)
     date_completed = models.DateTimeField(null=True, blank=True)
-    important = models.BooleanField(default=False)
     # completado = models.BooleanField(default=False)
+    important = models.BooleanField(default=False)
+
+    # Llave foranea de la tabla user generada por django
+    # Para asignar un usuario a cada tarea
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
