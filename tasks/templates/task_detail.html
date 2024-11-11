@@ -5,28 +5,33 @@
 {% block head %}{% endblock %}
 
 {% block body %}
-<h1>
-    {{ task.title }}
-    
-</h1>
-{{ error }}
-<p>
-    {{ task.description }}
-</p>
-<form method="POST">
-    {% csrf_token %}
-    {{form}}
-    <button>
-        Actualizar
-    </button>
-</form>
 
-<form action="{% url 'complete_task' task.id %}" method="POST">
-    {% csrf_token %}
-    <button>Completado</button>
-</form>
-<form action="{% url 'delete_task' task.id %}" method="POST">
-    {% csrf_token %}
-    <button>DELETE</button>
-</form>
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card card-body">
+                <h1 class="text-secondary text-center">{{ task.title }}</h1>
+                {{ error }}
+                <p>{{ task.description }}</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form}}
+                    <button class="btn btn-secondary">Actualizar</button>
+                </form>
+                <div class="d-flex mt-3">
+                    <form action="{% url 'complete_task' task.id %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-dark">Completado</button>
+                    </form>
+                    <form action="{% url 'delete_task' task.id %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-danger">ELIMINAR</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

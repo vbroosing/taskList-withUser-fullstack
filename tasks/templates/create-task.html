@@ -4,13 +4,22 @@
 {% block head %}{% endblock %}
 
 {% block body %}
-<h1>Crear Tarea</h1>
-<form action="/tasks/create/" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    {{ error }}
-    <button>
-        Save
-    </button>
-</form>
+<main class="container">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <h1>Crear Tarea</h1>
+            <form action="/tasks/create/" method="POST" 
+            class="card card-body">
+                {% csrf_token %}
+                {{ error }}
+
+                {{ form }}
+                
+                <button class="btn btn-secondary">
+                    Save
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
 {% endblock %}
