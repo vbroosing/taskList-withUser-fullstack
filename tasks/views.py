@@ -18,44 +18,48 @@ def signup(req):
     form = UserCreationForm()  # Instanciando el form
     
     if req.method == 'POST':
-        if req.POST['password1'] == req.POST['password2']:
-            try:
-                # registrar Usuario
-                user = User.objects.create_user(username=req.POST['username'], password=req.POST['password1'])
-                user.save()
+        try:
+            if req.POST['password1'] == req.POST['password2']:
+                try:
+                    # registrar Usuario
+                    user = User.objects.create_user(username=req.POST['username'], password=req.POST['password1'])
+                    user.save()
 
-                # iniciando sesion
-                login(req, user)
+                    # iniciando sesion
+                    login(req, user)
 
-                return redirect('tasks') 
-            except IntegrityError:
+                    return redirect('tasks') 
+                except IntegrityError:
+                    return render(req, 'signup.html', {
+                        'form': form,
+                        'error': 'El usuario ya existte',
+                    })
+            else:
                 return render(req, 'signup.html', {
-                    'form': form,
-                    'error': 'El usuario ya existte',
-                })
-        else:
-            return render(req, 'signup.html', {
-                    'form': form,
-                    'error': 'Las contraseñas no coinciden.',
-                })
+                        'form': form,
+                        'error': 'Las contraseñas no coinciden.',
+                    })
+        except:
+            return redirect('signup')
     
     elif req.method == 'GET':
         return render(req, 'signup.html', {'form': form})  # Pasamos el formulario al template
-
 def signin(req):
     form = AuthenticationForm()
 
     if req.method == 'GET':
         return render(req, 'signin.html', {'form': form})
     else:
-        user = authenticate(req, username=req.POST['username'], password=req.POST['password'])
-        if user is None:
-            return render(req, 'signin.html', {'form': form, 'error': 'Usuario no registrado'})
-        else:
+        try:
+            user = authenticate(req, username=req.POST['username'], password=req.POST['password'])
+            if user is None:
+                return render(req, 'signin.html', {'form': form, 'error': 'Usuario no registrado'})
+            else:
 
-            login(req, user)
-            return redirect('tasks')
-
+                login(req, user)
+                return redirect('tasks')
+        except:
+            return redirect('signin')
 @login_required
 def signout(req):
     logout(req)
@@ -121,13 +125,13 @@ def task_detail(req, task_id):
     if req.method == 'GET':
         task = get_object_or_404(Task, pk=task_id, user=req.user)
         form = TaskForm(instance=task)
-        print(task_id)
+        # print(task_id)
         return render(req, 'task_detail.html', {
             'task': task,
             'form': form,
             })
     else:
-        print(req.POST)
+        # print(req.POST)
         task = get_object_or_404(Task, pk=task_id, user=req.user)
         form = TaskForm(req.POST, instance=task)
         try:

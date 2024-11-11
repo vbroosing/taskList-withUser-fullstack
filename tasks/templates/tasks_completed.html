@@ -6,25 +6,33 @@
 
 {% block body %}
 
-<!-- {{ error }} -->
-<p>TASKS COMPLETED</p>
-<ul>
-    {% for task in tasks %}
-    <li>
-        <a href="{{ task.id }}">
-            <h1>{{ task.title }}</h1>
-            <p>{{ task.description }}</p>
-            <p>{{ task.user.username }}</p>
-            <p>{{ task.date_completed|date:'M j Y:i' }}</p>
+<main class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            {{ error }}
+            <h1 class="text-center display-3 py-5">TASKS COMPLETED</h1>
+                <ul class="list-group">
+                    {% for task in tasks %}
+                    <a href="{{ task.id }}" class="list-group-item">
+                        <header class="d-flex justify-content-between">
+                            {% if task.important %}
+                            <strong class="text-success">{{ task.title }}</strong>
+                            {% else %}
+                            <strong>{{ task.title }}</strong>
 
-            {% if task.important %}
-                <p>Importante.</p>
-            {% endif %}
-            <!-- <p>{{ task.user.password }}</p> -->
-        </a>
+                            {% endif %}
+                            <p>{{ task.user.username }}</p>
+                        </header>
+                        <p>{{ task.description }}</p>
+                        <p>Completado: {{ task.date_completed|date:'M j Y:i' }}</p>
+            
+                    </a>
+                
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+    
+</main>
 
-    </li>
-    {% endfor %}
-
-</ul>
 {% endblock %}
